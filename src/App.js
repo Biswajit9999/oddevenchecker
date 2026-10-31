@@ -1,23 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import "./App.css";
 
 function App() {
+  const [value, setValue] = useState("");
+  const [result, setResult] = useState("");
+
+  const handleCheck = (event) => {
+    event.preventDefault();
+
+    const trimmed = value.trim();
+
+    // only whole numbers (optionally negative) are valid
+    if (!/^-?\d+$/.test(trimmed)) {
+      setResult("Not a valid number!");
+      return;
+    }
+
+    const n = Number(trimmed);
+
+    if (n % 2 === 0) {
+      setResult(`The number ${n} is even!`);
+    } else {
+      setResult(`Oops, ${n} is odd!`);
+    }
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="page">
+      <div className="card">
+        <h1>Even or Odd Checker</h1>
+
+        <form onSubmit={handleCheck}>
+          <input
+            type="text"
+            name="number"
+            placeholder="Enter a number"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+          />
+          <button type="submit">Check</button>
+        </form>
+
+        {result && <p className="result">{result}</p>}
+      </div>
     </div>
   );
 }
